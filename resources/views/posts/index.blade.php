@@ -29,13 +29,16 @@
             <tr>
               <td>{{$post->id}}</td>
               <td>{{$post->title}}</td>
-              <td>{{$post->body}}</td>
+              <td>{{ substr(strip_tags($post->body), 0, 50) }}{{ strlen(strip_tags($post->body)) > 50 ? "..." : "" }}</td>
               <td>{{date('Y-m-d', strtotime($post->created_at))}}</td>
               <td><a href="{{route("posts.show", $post->id)}}" class="btn btn-default">View</a><a href="{{route("posts.edit", $post->id)}}" class="btn btn-default">Edit</a></td>
             </tr>
           @endforeach 
         </tbody>
       </table>
+      <div class="text-center">
+        {!! $posts->links() !!}
+      </div>
     </div>
   </div>
 @stop
