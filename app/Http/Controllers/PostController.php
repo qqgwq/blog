@@ -9,7 +9,10 @@ use App\Post;
 use Session;
 
 class PostController extends Controller
-{
+{   
+    public function __construct(){
+      $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,8 +20,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy("id", "desc")->paginate(5);
-        return view('posts.index', compact('posts'));
+			$posts = Post::orderBy("id", "desc")->paginate(5);
+			return view('posts.index', compact('posts'));
     }
 
     /**
@@ -28,7 +31,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+      return view('posts.create');
     }
 
     /**
@@ -39,21 +42,23 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, array(
-            'title' => 'required|max:255',
-            'body' => 'required'
-        ));
+			$this->validate($request, array(
+				'title' => 'required|max:255',
+				'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+				'body' => 'required'
+			));
 
-        // store in database
-        $post = new Post;
-        $post->title = $request->title;
-        $post->body = $request->body;
+			// store in database
+			$post = new Post;
+			$post->title = $request->title;
+			$post->slug = $request->slug;
+			$post->body = $request->body;
 
-        $post->save();
-        
-        Session::flash('success', 'The blog post was successfully save!');
+			$post->save();
+			
+			Session::flash('success', 'The blog post was successfully save!');
 
-        return redirect()->route('posts.show', $post->id);
+      return redirect()->route('posts.show', $post->id);
     }
 
     /**
@@ -64,8 +69,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
-        return view('posts.show')->withPost($post);
+			$post = Post::find($id);
+			return view('posts.show')->withPost($post);
     }
 
     /**
@@ -76,8 +81,8 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::find($id);
-        return view('posts.edit')->withPost($post);
+			$post = Post::find($id);
+			return view('posts.edit')->withPost($post);
     }
 
     /**
@@ -89,19 +94,29 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {   
-        $this->validate($request, [
-            'title' => 'required|max:255',
-            'body' => 'required'
-        ]);
+			$post = Post::find($id);
+			if($request->input('slug') == $post->slug){
+				$this->validate($request, [
+					'title' => 'required|max:255',
+					'body' => 'required'
+				]);
+			}else{
+				$this->validate($request, [
+					'title' => 'required|max:255',
+					'slug' => 'required|alpha_dash|min:5|max:255|unique:posts,slug',
+					'body' => 'required'
+				]);
+			}
 
-        $post = Post::find($id);
-        $post->title = $request->input('title');
-        $post->body = $request->input('body');
+			$post = Post::find($id);
+			$post->title = $request->input('title');
+			$post->slug = $request->input('slug');
+			$post->body = $request->input('body');
 
-        $post->save();
+			$post->save();
 
-        Session::flash('success', 'This post was successfully saved');
-        return redirect()->route('posts.show', $post->id);
+			Session::flash('success', 'This post was successfully saved');
+			return redirect()->route('posts.show', $post->id);
 
     }
 
@@ -113,9 +128,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::find($id);
-        $post->delete();
-        Session::flash('success', 'The post was successfully deleted.');
-        return redirect()->route('posts.index');
-    }
+			$post = Post::find($id);
+			$post->delete();
+			Session::flash('success', 'The post was successfully deleted.');
+			return redirect()->route('posts.index');
+	}
 }

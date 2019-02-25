@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => null, 'name' => null],
+    'from' => ['address' => 'norreply@gwq.com', 'name' => 'Laravel Application'],
 
     /*
     |--------------------------------------------------------------------------
