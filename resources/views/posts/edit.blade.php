@@ -1,18 +1,40 @@
 @extends('main')
 @section('title', "| Edit Blog Post")
 
+@section('stylesheets')
+  {!! Html::style('css/select2.min.css') !!}
+@endsection
+
 @section('content')
   <div class="row">
     {!! Form::model($post, ['route' =>['posts.update', $post->id], 'method' => 'PUT']) !!}
     <div class="col-md-8">
-      {!! Form::label('title', 'Title:') !!}
-      {!! Form::text('title', null, ["class" => 'form-control']) !!}
+      <div class="form-group">
+        {!! Form::label('title', 'Title:') !!}
+        {!! Form::text('title', null, ["class" => 'form-control']) !!}
+      </div>
+      
+      <div class="form-group">
+        {!! Form::label('slug', 'Slug:', ["class" => 'form-top']) !!}
+        {!! Form::text('slug', null, ["class" => 'form-control']) !!}
+      </div>
+     
+      <div class="form-group">
+        {{ Form::label('category_id', "Category:", ['class' => 'form-spacing-top']) }}
+        {{ Form::select('category_id', $categories, null, ['class' => 'form-control']) }}
+      </div>
 
-      {!! Form::label('slug', 'Slug:', ["class" => 'form-top']) !!}
-      {!! Form::text('slug', null, ["class" => 'form-control']) !!}
-
-      {!! Form::label('body', 'Body:', ["class" => 'form-top']) !!}
-      {!! Form::textarea('body', null, ["class" => 'form-control']) !!}
+      <div class="form-group">
+        {{ Form::label('tag_id', "Tag:", ['class' => 'form-spacing-top']) }}
+        {{ Form::select('tags[]', $tags, null, ['class' => 'form-control select-multi', 'multiple' => 'multiple']) }}
+      </div>
+     
+    
+      <div class="form-group">
+        {{ Form::label('body', 'Body:', ["class" => 'form-top']) }}
+        {{ Form::textarea('body', null, ["class" => 'form-control']) }}
+      </div>
+      
     </div>
 
     <div class="col-md-4">
@@ -39,3 +61,9 @@
     {!! Form::close() !!}
   </div>
 @stop
+
+@section('scripts')
+  <script type="text/javascript">
+    $(".select-multi").select2();
+  </script>
+@endsection

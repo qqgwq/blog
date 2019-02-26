@@ -1,7 +1,5 @@
-@if (Session::has('success'))
-  <div class="alert alert-success">
-    {{ Session::get('success')}}
-  </div>
+@if(Session::has('success'))
+  <p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('success') }}</p>
 @endif
 
 @if (count($errors) > 0)

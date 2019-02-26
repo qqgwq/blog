@@ -8,6 +8,14 @@
         <h1>{{$post->title}}</h1>
 
         <p class="lead">{{$post->body}}</p>
+
+        <hr>
+
+        <div class="tags">
+          @foreach($post->tags as $tag)
+          <span class="label label-default">{{ $tag->name }}</span>
+          @endforeach
+        </div>
     </div>
 
     <div class="col-md-4">
@@ -24,16 +32,23 @@
           <dt>Last Updated:</dt>
           <p>{{date('Y-m-d', strtotime($post->updated_at))}}</p>
         </dl>
+        <dl class="dl-horizontal">
+          <dt>Category:</dt>
+          <p>{{ $post->category->name }}</p>
+        </dl>
+
         
         <div class="row">
           <div class="col-sm-6">
             {!! Html::linkRoute('posts.edit', 'Edit', [$post->id], ['class' => 'btn btn-primary btn-block']) !!}
           </div>
-          <div class="col-sm-6">
-            {!! Form::open(['route' => ['posts.destroy', $post->id], "method" => 'DELETE'])!!}
-            {!! Form::submit('Delete', ["class" => 'btn btn-danger btn-block'])!!}
-            {!! Form::close() !!}
-          </div>
+          @if ((Auth::user()->name == $post->user->name ))
+            <div class="col-sm-6">
+              {!! Form::open(['route' => ['posts.destroy', $post->id], "method" => 'DELETE'])!!}
+              {!! Form::submit('Delete', ["class" => 'btn btn-danger btn-block'])!!}
+              {!! Form::close() !!}
+            </div>
+          @endif
         </div>
         <div class="row">
           <div class="col-md-12">

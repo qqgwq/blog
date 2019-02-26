@@ -23,14 +23,15 @@
             Hello {{ Auth::user()->name }}<span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-            <li><a href="{{ route('posts.index') }}">Posts</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
+              <li><a href="{{ route('posts.index') }}">Posts</a></li>
+              <li><a href="{{ route('categories.index')}}">Categories</a></li>
+              <li><a href="{{ route('tags.index') }}">Tags</a></li>
               <li role="separator" class="divider"></li>
             <li><a href="{{ route('logout') }}">Logout</a></li>
             </ul>
           </li>
         @else
+          <li><a href="{{ route('register')}}" class="btn btn-default">Signup</a></li>
           <li><a href="{{ route('login') }}" class="btn btn-default">Login</a></li>
         @endif
       </ul>

@@ -31,7 +31,10 @@
               <td>{{$post->title}}</td>
               <td>{{ substr(strip_tags($post->body), 0, 50) }}{{ strlen(strip_tags($post->body)) > 50 ? "..." : "" }}</td>
               <td>{{date('Y-m-d', strtotime($post->created_at))}}</td>
-              <td><a href="{{route("posts.show", $post->id)}}" class="btn btn-default">View</a><a href="{{route("posts.edit", $post->id)}}" class="btn btn-default">Edit</a></td>
+              <td><a href="{{route("posts.show", $post->id)}}" class="btn btn-default">View</a></td>
+              @if ((Auth::user()->name == $post->user->name))
+                <td><a href="{{route("posts.edit", $post->id)}}" class="btn btn-default">Edit</a></td>
+              @endif
             </tr>
           @endforeach 
         </tbody>

@@ -9,7 +9,7 @@
           <h3>Register</h3>
         </div>
         <div class="panel-body">
-          {!! Form::open() !!}
+          {!! Form::open(['id' => 'signup']) !!}
             <div class="form-group">
               {{ Form::label('name', "Name:") }}
               {{ Form::text('name', null, ['class' => 'form-control']) }}
