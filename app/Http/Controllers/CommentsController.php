@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Tag;
-use Session;
+use App\Comment;
+use App\Post;
+use Auth;
 
-class TagController extends Controller
+class CommentsController extends Controller
 {
-    public function __construct(){
+    public function __construct() {
         $this->middleware('auth');
     }
     /**
@@ -20,8 +21,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::all();
-        return view('tags.index')->withTags($tags);
+        //
     }
 
     /**
@@ -31,7 +31,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        
+        //
     }
 
     /**
@@ -40,18 +40,25 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $post_id)
     {
-        $this->validate($request, [
-            'name' => 'required|max:255'
+        $this->validate($request, array(
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255',
+            'comment' => 'required|min:5|max:2000'
+        ));
+
+        $post = Post::find($post_id);
+        $user = Auth::user()->id;
+        
+        $comment = $post->comments()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'comment' => $request->comment,
+            'approved' => true,
+            'user_id' => $user,
         ]);
-
-        $tag = new Tag;
-        $tag->name = $request->name;
-        $tag->save();
-
-        Session::flash('success', 'New Tag successfully created!');
-        return redirect()->route('tags.index');
+        return redirect()->route('blog.single', $post->slug);
     }
 
     /**
@@ -62,8 +69,7 @@ class TagController extends Controller
      */
     public function show($id)
     {
-        $tag = Tag::find($id);
-        return view('tags.show')->withTag($tag);
+        //
     }
 
     /**
@@ -74,8 +80,7 @@ class TagController extends Controller
      */
     public function edit($id)
     {
-        $tag = Tag::find($id);
-        return view('tags.edit')->withTag($tag);
+        //
     }
 
     /**
@@ -87,13 +92,7 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tag = Tag::find($id);
-        $this->validate($request, ['name' => 'required|max:255']);
-
-        $tag->name = $request->name;
-        $tag->save();
-        Session::flash('success', 'Successfully saved your new tag!');
-        return redirect()->route('tags.show', $tag->id);
+        //
     }
 
     /**
@@ -104,10 +103,6 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        $tag = Tag::find($id);
-        $tag->delete();
-        $tag->posts()->detach();
-        Session::flash('success', 'Tag was deleted successfully');
-        return redirect()->route('tags.index');
+        //
     }
 }

@@ -35,6 +35,11 @@ Route::group(['middleware' => ['web']], function() {
   // Tags
   Route::resource('tags', 'TagController', ['except' => 'create']);
 
+  //Comments
+  Route::post('comments/{post_id}', ['uses' => 'CommentsController@store', 'as' => 'comments.store']);
+  
+
+
   Route::get('blog/{slug}', ['as' => 'blog.single', 'uses' => 'BlogController@getSingle'])
       ->where('slug', '[\w\d\-\_]+');
   Route::get('blog', ['uses' => 'BlogController@getIndex', 'as' => 'Blog.index']);

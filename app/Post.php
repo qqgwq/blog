@@ -18,8 +18,12 @@ class Post extends Model
       return $this->belongsToMany('App\Tag');
     }
 
+    public function comments(){
+      return $this->hasMany('App\Comment');
+    }
+
     protected $fillable = [
-      'title', 'body', 'slug', 'category_id',
+      'title', 'body', 'slug', 'category_id', 'tag_id',
     ];
 }
 
