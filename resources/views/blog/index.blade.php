@@ -13,7 +13,7 @@
       <div class="col-md-8 col-md-offset-2">
         <h2>{{$post->title}}</h2>
         <h5>Published: {{ date('Y-m-d', strtotime($post->created_at))}}</h5>
-        <p>{{ substr($post->body, 0, 50) }}{{strlen($post->body) > 50 ? '...' : ''}}</p>
+        <p>{{ substr(strip_tags($post->body), 0, 50) }}{{strlen(strip_tags($post->body)) > 50 ? '...' : ''}}</p>
         <a href="{{ route('blog.single', $post->slug)}}" class="btn btn-default">Read More</a>
       </div>
       <hr>
